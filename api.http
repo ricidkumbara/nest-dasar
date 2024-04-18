@@ -1,0 +1,26 @@
+###
+GET http://localhost:3000
+
+###
+GET http://localhost:3000/api/users
+
+###
+POST http://localhost:3000/api/users
+
+###
+GET http://localhost:3000/api/users/1
+
+###
+GET http://localhost:3000/api/users/hello?name=ricid&age=25
+
+###
+GET http://localhost:3000/api/users/sample-response
+
+###
+GET http://localhost:3000/api/users/redirect
+
+###
+GET http://localhost:3000/api/users/set-cookie?name=ricid-update
+
+###
+GET http://localhost:3000/api/users/get-cookie
