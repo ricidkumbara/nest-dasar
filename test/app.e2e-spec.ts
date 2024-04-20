@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import exp from 'constants';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -21,4 +22,17 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  it('should can hello', async () => {
+      const result = await request(app.getHttpServer())
+        .get('/api/users/hello')
+        .query({
+          name: 'Ricid',
+          age: '25'
+        });
+
+      expect(result.status).toBe(200);
+      expect(result.text).toBe('Hello Ricid, your age 25');
+  });
+
 });

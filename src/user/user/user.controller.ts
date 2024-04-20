@@ -4,6 +4,7 @@ import {
     Header, 
     HttpCode, 
     HttpRedirectResponse, 
+    Inject, 
     Param, 
     Post, 
     Query, 
@@ -12,9 +13,25 @@ import {
     Res 
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { UserService } from './user.service';
 
 @Controller('/api/users')
 export class UserController {
+    // Inject using property based
+    /* @Inject()
+    @Optional // jika tidak wajib
+    private userService: UserService; */
+
+    // Inject using constructor
+    constructor (private service: UserService) {};
+
+    @Get('/view/hello')
+    viewHello(@Query('name') name: string, @Res() response: Response) {
+        response.render('index.html', {
+            title: 'Template Engine',
+            name: name,
+        });
+    }
 
     @Get('/set-cookie')
     setCookie(@Query('name') name: string, @Res() response: Response) {
@@ -50,15 +67,20 @@ export class UserController {
         };
     }
 
-    /* @Get('/hello')
+    @Get('/hello')
     sayHello(@Query('name') name: string, @Query('age') age: string): string { 
         return `Hello ${name}, your age ${age}`;
-    } */
+    }
 
-    @Get('/hello')
+    // @Get('/hello')
+    // async sayHello(@Query('name') name: string, @Query('age') age: string): Promise<string> { 
+    //     return this.service.sayHello('Ricid', '25');
+    // }
+
+    /* @Get('/hello')
     async sayHello(@Query('name') name: string, @Query('age') age: string): Promise<string> { 
         return `Hello ${name}, your age ${age}`;
-    }
+    } */
 
     @Get('/:id')
     getById(@Param('id') id: string): string { 
