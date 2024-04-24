@@ -23,4 +23,4 @@ GET http://localhost:3000/api/users/redirect
 GET http://localhost:3000/api/users/set-cookie?name=ricid-update
 
 ###
-GET http://localhost:3000/api/users/get-cookie
+GET http://localhost:3000/api/users/connection
