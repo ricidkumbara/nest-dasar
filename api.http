@@ -24,3 +24,9 @@ GET http://localhost:3000/api/users/set-cookie?name=ricid-update
 
 ###
 GET http://localhost:3000/api/users/connection
+
+###
+GET http://localhost:3000/api/users/create?name=ricid&email=ricidkumbara@gmail.com
+
+###
+GET http://localhost:3000/api/users/hello2?name=ricid&age=25

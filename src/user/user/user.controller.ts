@@ -17,6 +17,8 @@ import { UserService } from './user.service';
 import { Connection } from '../connection/connection';
 import { MailService } from '../mail/mail.service';
 import { UserRepository } from '../user-repository/user-repository';
+import { MemberService } from '../member/member.service';
+import { User } from '@prisma/client';
 
 @Controller('/api/users')
 export class UserController {
@@ -32,13 +34,18 @@ export class UserController {
         private mailService: MailService,
         @Inject('EmailService') private emailService: MailService,
         private userRepository: UserRepository,
+        private memberService: MemberService,
     ) {};
 
     @Get('/connection')
     async getConnection(): Promise<string> {
-        this.userRepository.save();
+        // this.userRepository.save();
         this.mailService.send();
         this.emailService.send();
+
+        console.log(this.memberService.getConnectionName());
+        this.memberService.sendMail();
+    
         return this.connection.getName();
     }
 
@@ -84,15 +91,20 @@ export class UserController {
         };
     }
 
+    @Get('/create')
+    async create(@Query('name') name: string, @Query('email') email: string): Promise<User> { 
+        return this.userRepository.save(name, email);
+    }
+
     @Get('/hello')
     sayHello(@Query('name') name: string, @Query('age') age: string): string { 
         return `Hello ${name}, your age ${age}`;
     }
 
-    // @Get('/hello')
-    // async sayHello(@Query('name') name: string, @Query('age') age: string): Promise<string> { 
-    //     return this.service.sayHello('Ricid', '25');
-    // }
+    @Get('/hello2')
+    async sayHello2(@Query('name') name: string, @Query('age') age: string): Promise<string> { 
+        return this.service.sayHello(name, age);
+    }
 
     /* @Get('/hello')
     async sayHello(@Query('name') name: string, @Query('age') age: string): Promise<string> { 
