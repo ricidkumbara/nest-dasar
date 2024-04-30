@@ -5,6 +5,8 @@ import * as mustache from 'mustache-express';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { ValidationFilter } from './validation/validation.filter';
+import { TimeInterceptor } from './time/time.interceptor';
 
 async function bootstrap() {
   // const app = await NestFactory.create(AppModule);
@@ -17,6 +19,9 @@ async function bootstrap() {
   app.set('views', __dirname + '/../views');
   app.set('view engine', 'html');
   app.engine('html', mustache());
+
+  app.useGlobalFilters(new ValidationFilter());
+  // app.useGlobalInterceptors(new TimeInterceptor());
 
   const configService = app.get(ConfigService);
   await app.listen(configService.get('PORT'));

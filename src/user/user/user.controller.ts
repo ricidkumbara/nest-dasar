@@ -1,4 +1,5 @@
 import { 
+    Body,
     Controller, 
     Get, 
     Header, 
@@ -6,11 +7,15 @@ import {
     HttpRedirectResponse, 
     Inject, 
     Param, 
+    ParseIntPipe, 
     Post, 
     Query, 
     Redirect, 
     Req, 
-    Res 
+    Res, 
+    UseFilters,
+    UseInterceptors,
+    UsePipes
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
@@ -19,6 +24,10 @@ import { MailService } from '../mail/mail.service';
 import { UserRepository } from '../user-repository/user-repository';
 import { MemberService } from '../member/member.service';
 import { User } from '@prisma/client';
+import { ValidationFilter } from 'src/validation/validation.filter';
+import { ValidationPipe } from 'src/validation/validation.pipe';
+import { LoginUserRequest, loginUserRequestValidation } from 'src/model/login.model';
+import { TimeInterceptor } from 'src/time/time.interceptor';
 
 @Controller('/api/users')
 export class UserController {
@@ -36,6 +45,21 @@ export class UserController {
         private userRepository: UserRepository,
         private memberService: MemberService,
     ) {};
+
+    /* @Post('/login')
+    @UseFilters(ValidationFilter)
+    login(@Body(new ValidationPipe(loginUserRequestValidation)) request: LoginUserRequest) {
+        return `Hello ${request.username}`;
+    } */
+
+    @Post('/login')
+    @UsePipes(new ValidationPipe(loginUserRequestValidation))
+    @UseFilters(ValidationFilter)
+    @UseInterceptors(TimeInterceptor)
+    @Header('Content-Type', 'application/json')
+    login(@Query('name') name: string, @Body() request: LoginUserRequest) {
+        return { data: `Hello ${request.username}` };
+    }
 
     @Get('/connection')
     async getConnection(): Promise<string> {
@@ -102,6 +126,7 @@ export class UserController {
     }
 
     @Get('/hello2')
+    // @UseFilters(ValidationFilter)
     async sayHello2(@Query('name') name: string, @Query('age') age: string): Promise<string> { 
         return this.service.sayHello(name, age);
     }
@@ -112,7 +137,8 @@ export class UserController {
     } */
 
     @Get('/:id')
-    getById(@Param('id') id: string): string { 
+    getById(@Param('id', ParseIntPipe) id: number): string { 
+        console.log(id * 10);
         return `GET ${id}`;
     }
 

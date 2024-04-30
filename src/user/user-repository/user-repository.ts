@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { Connection } from '../connection/connection';
 import { PrismaService } from 'src/prisma/prisma/prisma.service';
 import { Logger } from 'winston';
@@ -20,6 +20,10 @@ export class UserRepository {
     }
 
     async save(name: string, email: string) {
+        if (!name) {
+            throw new HttpException({ code: 400, errors: 'Name is required' }, 400);
+        }
+
         this.logger.info(`create user ${name} | ${email}`);
 
         return this.prismaService.user.create({
