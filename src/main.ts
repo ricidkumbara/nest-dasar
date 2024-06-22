@@ -20,8 +20,11 @@ async function bootstrap() {
   app.set('view engine', 'html');
   app.engine('html', mustache());
 
+  app.enableShutdownHooks();
+
   app.useGlobalFilters(new ValidationFilter());
   // app.useGlobalInterceptors(new TimeInterceptor());
+  // app.useGlobalGuards()
 
   const configService = app.get(ConfigService);
   await app.listen(configService.get('PORT'));

@@ -8,7 +8,7 @@ export class LogMiddleware implements NestMiddleware<Request, Response> {
   constructor (@Inject(WINSTON_MODULE_PROVIDER) private logger: Logger) {}
 
   use(req: Request, res: Response, next: () => void) {
-    this.logger.info(`Receive request from URL : ${req.url}`);
+    this.logger.info(`${req.method} ${req.url}`);
     next();
   }
 }

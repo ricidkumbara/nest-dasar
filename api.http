@@ -39,3 +39,8 @@ Content-Type: application/json
     "username": "x",
     "password": "x"
 }
+
+###
+GET http://localhost:3000/api/users/current
+Content-Type: application/json
+x-username: 181
