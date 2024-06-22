@@ -21,7 +21,6 @@ async function bootstrap() {
   app.engine('html', mustache());
 
   app.enableShutdownHooks();
-
   app.useGlobalFilters(new ValidationFilter());
   // app.useGlobalInterceptors(new TimeInterceptor());
   // app.useGlobalGuards()
